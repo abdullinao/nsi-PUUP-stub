@@ -20,6 +20,14 @@ public class main {
 
 
     public static void mainJob() {
+      getChangedGuidsFromUfos();
+
+    }
+
+
+
+    public static ArrayList<String> getChangedGuidsFromUfos(){
+
         Connection pimCon = null;
         Connection UfosCon = null;
         ArrayList<String> guidsArray = new ArrayList<String>();
@@ -59,6 +67,7 @@ public class main {
             e.printStackTrace();
         }
         System.out.println("конец");
+        return guidsArray;
     }
 
 }
