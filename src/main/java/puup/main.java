@@ -6,8 +6,6 @@ import java.util.ArrayList;
 public class main {
 
 
-    private static prop prop;
-
     public static void main(String[] args) {
         try {
             // while (true) {
@@ -20,13 +18,18 @@ public class main {
 
 
     public static void mainJob() {
-      getChangedGuidsFromUfos();
+        ArrayList<String> guidstoSend = getChangedGuidsFromUfos();
+        try {
+            puup.soap.soap_initialize.eh_initialize(guidstoSend);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
 
-
-    public static ArrayList<String> getChangedGuidsFromUfos(){
+    public static ArrayList<String> getChangedGuidsFromUfos() {
 
         Connection pimCon = null;
         Connection UfosCon = null;

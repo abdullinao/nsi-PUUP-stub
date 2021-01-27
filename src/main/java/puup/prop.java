@@ -21,6 +21,11 @@ public class prop {
     private String ufosPass;
     private String ufosTns;
 
+    private String dict_type;
+    private String state;
+    private String event;
+    private String eh_adress;
+
 
     public prop() throws Exception {
         //   FileInputStream fileInputStream;
@@ -43,6 +48,13 @@ public class prop {
             this.ufosUser = prop.getProperty("ufosuser");
             this.ufosPass = prop.getProperty("ufospassword");
             this.ufosTns = prop.getProperty("ufosTns");
+
+            //soap
+
+            this.dict_type = prop.getProperty("dict_type");
+            this.state = prop.getProperty("state");
+            this.event = prop.getProperty("event");
+            this.eh_adress = prop.getProperty("eh_url");
 
         } catch (IOException e) {
             System.out.println("Ошибка в программе: ошибка чтения config.properties");
@@ -93,5 +105,21 @@ public class prop {
 
     public String getUfosPass() {
         return ufosPass;
+    }
+
+    public String getDict_type() {
+        return dict_type;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public String getEh_adress() {
+        return eh_adress;
     }
 }
