@@ -42,7 +42,7 @@ public class soap_initialize {
 
         //выводим данные для дебуга.
 
-        System.out.println("\n\nадрес эвентхендлера: " + prop1.getEh_adress());
+        System.out.println("\nадрес эвентхендлера: " + prop1.getEh_adress());
 
 
         System.out.println("\ndocument-type(REF_UBPandNUBP, REF_PersAccount...): " + prop1.getDict_type());
@@ -52,11 +52,9 @@ public class soap_initialize {
 
 
         System.out.println("\noperation-code(CreateRecord/toArchive...): " + prop1.getEvent());
-        System.out.println("Строк в массиве с гуидами: " + guidsArray.size());
 
         try {
             for (int i = 0; i < guidsArray.size(); ++i) {
-
                 soap_generator.callSoapWebService(endpoint, soapAction, guidsArray.get(i)); //создаем соап запрос для этого гуида
             }
         } catch (Exception e) {

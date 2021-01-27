@@ -1,6 +1,7 @@
 puup\soap\soap_generator.class
 puup\utils.class
 puup\bdConn.class
+puup\main$1.class
 puup\main.class
 puup\soap\soap_initialize.class
 puup\prop.class
