@@ -1,4 +1,6 @@
-package puup;
+package puup.bd;
+
+import puup.utils.prop;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,7 +25,7 @@ public class bdConn {
             pimCon = DriverManager.getConnection(
                     "jdbc:oracle:thin:@" + prop1.getPimBdurl()
                             + ":" + prop1.getPimPort() + "/" + prop1.getPimServicename() + " "
-                    , prop1.getPimPort(), prop1.getPimPass());
+                    , prop1.getPimUser(), prop1.getPimPass());
         } catch (SQLException e) {
 
             System.out.println("Ошибка подключения к бд пим!");

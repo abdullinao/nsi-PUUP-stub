@@ -1,24 +1,29 @@
 package puup;
 
-import java.sql.*;
+import puup.utils.prop;
+
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class main {
+    private static puup.utils.prop prop1;
 
-
-    public static void main(String[] args) {
-        long lastLaunch = 0;//время последнего запуска
-
+    static {
         try {
-            //  while (true) {
-            mainJob();
-            lastLaunch = System.currentTimeMillis();
-            // }
+            prop1 = new prop();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            mainJob();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainJob();
         }
     }
 
@@ -26,15 +31,21 @@ public class main {
      * вызов метода каждые сколько-то секунд
      */
     public static void mainJob() {
+
         //        try {
 //            puup.soap.soap_initialize.eh_initialize(guidsToSend);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
         Runnable FUCKRUN = new Runnable() {
+            ArrayList<String> guidsToSend;
+
             public void run() {
+
+                puup.utils.utils.printTime();
                 try {
-                    ArrayList<String> guidsToSend = getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
+                    puup.bd.pim.SQLexecute(guidsToSend);
+                    guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -43,53 +54,11 @@ public class main {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(FUCKRUN, 0, 290, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(FUCKRUN, 0, prop1.getTimeout() - prop1.getTimelag(), TimeUnit.SECONDS);//минус 10 сек
+        //на лаги, лучше отправить запись дважды чем не отправить))
 
 
     }
 
-
-    public static ArrayList<String> getChangedGuidsFromUfos() {
-
-        Connection UfosCon = null;
-        ArrayList<String> guidsArray = new ArrayList<String>();
-
-
-        //получение соединения с бд и делаем свои бд приколы
-        try {
-
-            System.out.println("пробую получить коннект с бд уфос");
-            //pimCon = bdConn.getPimConn();
-            UfosCon = bdConn.getUfosConn();
-
-
-            Statement UfosStatement = UfosCon.createStatement();
-            ResultSet UfosResult = UfosStatement.executeQuery(utils.UfosSqlReq()); // вставить скл запрос
-
-            while (UfosResult.next()) {
-                // UfosResult.next();
-                guidsArray.add(UfosResult.getString(1));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        try {
-//            for (int i = 0; i < guidsArray.size(); ++i) {
-//
-//                System.out.println(guidsArray.get(i));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//рвем коннект.
-        try {
-            // pimCon.close();
-            UfosCon.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("В уфосе изменилось: " + guidsArray.size());
-        return guidsArray;
-    }
 
 }

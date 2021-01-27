@@ -21,13 +21,13 @@ public class soap_generator {
             SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction), soapEndpointUrl);
 
             // Print the SOAP Response
-            System.out.println("Ответ:");
-            try {
-                soapResponse.writeTo(System.out);
-            } catch (NullPointerException nul) {
-                System.out.println("\nСервис не дал ответ на соап запрос.");
-            }
-            System.out.println();
+            //System.out.println("Ответ:");
+         //   try {
+          //      soapResponse.writeTo(System.out);
+         //   } catch (NullPointerException nul) {
+          //      System.out.println("\nСервис не дал ответ на соап запрос.");
+           // }
+           // System.out.println();
 
             soapConnection.close();
         } catch (Exception e) {
@@ -52,9 +52,9 @@ public class soap_generator {
         soapMessage.saveChanges();
 
         /* вывод сообщения для дебуга */
-        System.out.println("SOAP запрос для вебсервиса:\n");
-        soapMessage.writeTo(System.out);
-        System.out.println("\n");
+      //  System.out.println("SOAP запрос для вебсервиса:\n");
+       // soapMessage.writeTo(System.out);
+       // System.out.println("\n");
 
         return soapMessage;
     }
@@ -99,7 +99,6 @@ public class soap_generator {
         /** в результате получается строка
          * <even:dlc-action-event guid="TEST_guid" operation-code="TEST_operation_code"state="TEST_state" type="TEST_type"/>
          */
- 
     }
 
 

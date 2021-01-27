@@ -1,7 +1,9 @@
 puup\soap\soap_generator.class
-puup\utils.class
-puup\bdConn.class
+puup\utils\utils.class
+puup\bd\pim.class
+puup\bd\ufos.class
 puup\main$1.class
 puup\main.class
 puup\soap\soap_initialize.class
-puup\prop.class
+puup\bd\bdConn.class
+puup\utils\prop.class
