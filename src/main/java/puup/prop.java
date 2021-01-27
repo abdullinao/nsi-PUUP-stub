@@ -19,6 +19,7 @@ public class prop {
     private String ufosServicename;
     private String ufosUser;
     private String ufosPass;
+    private String ufosTns;
 
 
     public prop() throws Exception {
@@ -29,7 +30,7 @@ public class prop {
         try (InputStream is = prop.class.getClassLoader().getResourceAsStream("config.properties")) {
             Properties prop = new Properties();
             prop.load(is);
- //загружаем настройки подключеняи к бд пим из конфиг.пропертис
+            //загружаем настройки подключеняи к бд пим из конфиг.пропертис
             this.pimBdurl = prop.getProperty("pimBdurl");
             this.pimPort = prop.getProperty("pimport");
             this.pimServicename = prop.getProperty("pimservicename");
@@ -41,13 +42,17 @@ public class prop {
             this.ufosServicename = prop.getProperty("ufosservicename");
             this.ufosUser = prop.getProperty("ufosuser");
             this.ufosPass = prop.getProperty("ufospassword");
+            this.ufosTns = prop.getProperty("ufosTns");
 
         } catch (IOException e) {
             System.out.println("Ошибка в программе: ошибка чтения config.properties");
             e.printStackTrace();
         }
 
+    }
 
+    public String getUfosTns() {
+        return ufosTns;
     }
 
     public String getPimBdurl() {
