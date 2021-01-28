@@ -47,7 +47,14 @@ public class soap_initialize {
         // System.out.println("\noperation-code: " + prop1.getEvent());
 
         try {
-            soap_generator.callSoapWebService(endpoint, soapAction, guidsArray); //создаем соап запрос для этого гуида
+//<<<<<<< Updated upstream
+//            soap_generator.callSoapWebService(endpoint, soapAction, guidsArray); //создаем соап запрос для этого гуида
+//=======
+            for (int i = 0; i < guidsArray.size(); ++i) {
+                soap_generator.callSoapWebService(endpoint, soapAction, guidsArray.get(i)); //создаем соап запрос для этого гуида
+                Thread.sleep(70);
+            }
+//>>>>>>> Stashed changes
         } catch (Exception e) {
             e.printStackTrace();
         }

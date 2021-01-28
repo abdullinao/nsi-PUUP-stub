@@ -10,38 +10,17 @@ public class soap_generator {
     private static String guidString;
 
 
-    static int callSoapWebService(String soapEndpointUrl, String soapAction, ArrayList<String> guidsArray) {
-        int succ = 0;//success
+    static void callSoapWebService(String soapEndpointUrl, String soapAction, String guid) {
+
         try {
+
+            guidString = guid;
+            // Create SOAP Connection
             SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
-            try {
-                for (int i = 0; i < guidsArray.size(); ++i) {
-                    guidString = guidsArray.get(i);
-                    SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction), soapEndpointUrl);
-                    succ++;
-                }
-            } catch (Exception e) {
-                succ--;
-            }
-
-            // Create SOAP Connection
-            // SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-            // SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-
             // Send SOAP Message to SOAP Server
-            // SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction), soapEndpointUrl);
-
-            // Print the SOAP Response
-            //System.out.println("Ответ:");
-            //   try {
-            //      soapResponse.writeTo(System.out);
-            //   } catch (NullPointerException nul) {
-            //      System.out.println("\nСервис не дал ответ на соап запрос.");
-            // }
-            // System.out.println();
-
+            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction), soapEndpointUrl);
             soapConnection.close();
         } catch (Exception e) {
             System.err.println("\n" +
@@ -51,8 +30,24 @@ public class soap_generator {
                     "\n***************");
             e.printStackTrace();
         }
-        return succ;
     }
+        // Create SOAP Connection
+        // SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+        // SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+
+        // Send SOAP Message to SOAP Server
+        // SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction), soapEndpointUrl);
+
+        // Print the SOAP Response
+        //System.out.println("Ответ:");
+        //   try {
+        //      soapResponse.writeTo(System.out);
+        //   } catch (NullPointerException nul) {
+        //      System.out.println("\nСервис не дал ответ на соап запрос.");
+        // }
+        // System.out.println();
+
+
 
     private static SOAPMessage createSOAPRequest(String soapAction) throws Exception {
         MessageFactory messageFactory = MessageFactory.newInstance(/*SOAPConstants.SOAP_1_2_PROTOCOL */);
