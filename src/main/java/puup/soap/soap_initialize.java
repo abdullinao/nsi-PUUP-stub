@@ -41,19 +41,17 @@ public class soap_initialize {
 
         //выводим данные для дебуга.
 
-      // System.out.println("\nадрес эвентхендлера: " + prop1.getEh_adress());
-      // System.out.println("\ndocument-type: " + prop1.getDict_type());
-      // System.out.println("\ndocument-state: " + prop1.getState());
-      // System.out.println("\noperation-code: " + prop1.getEvent());
+        // System.out.println("\nадрес эвентхендлера: " + prop1.getEh_adress());
+        // System.out.println("\ndocument-type: " + prop1.getDict_type());
+        // System.out.println("\ndocument-state: " + prop1.getState());
+        // System.out.println("\noperation-code: " + prop1.getEvent());
 
         try {
-            for (int i = 0; i < guidsArray.size(); ++i) {
-                soap_generator.callSoapWebService(endpoint, soapAction, guidsArray.get(i)); //создаем соап запрос для этого гуида
-            }
+            soap_generator.callSoapWebService(endpoint, soapAction, guidsArray); //создаем соап запрос для этого гуида
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.print(" отправил " + guidsArray.size() + " соап-запросов.");
+
 //        while (guid != null) {
 //            String guid =
 //            System.out.println("\n\nработаю с гуидом " + guid);
