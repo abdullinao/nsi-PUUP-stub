@@ -52,7 +52,9 @@ public class soap_initialize {
 //=======
             for (int i = 0; i < guidsArray.size(); ++i) {
                 soap_generator.callSoapWebService(endpoint, soapAction, guidsArray.get(i)); //создаем соап запрос для этого гуида
+ 
                 Thread.sleep(70);
+
             }
 //>>>>>>> Stashed changes
         } catch (Exception e) {
