@@ -4,6 +4,7 @@ import puup.soap.soap_generator;
 import puup.utils.prop;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -30,9 +31,9 @@ public class pim {
 
                         pimStatement.execute(puup.utils.utils.pimSqlReq(guidsArray.get(i)));//отправляем скл запрос,запрос записан
                         //в утилсе, в утилс передается гуид из массива
-                       // System.out.print(" pim - ok: " + guidsArray.get(i) + ";");
+                        // System.out.print(" pim - ok: " + guidsArray.get(i) + ";");
                     }
-                    System.out.print(" из пим: "+guidsArray.size()+";");
+                    //   System.out.print(" из пим: "+guidsArray.size()+";");
                 } catch (NullPointerException np) {
                     System.out.print(" нет гуидов для отправки из пим;");
                 }
@@ -41,6 +42,33 @@ public class pim {
                 e.printStackTrace();
             }
             pimCon.close();
-        } else System.out.print(" отправка из пим отключена.");
+        } else System.out.println(" отправка из пим отключена.");
+    }
+
+
+
+    public static ArrayList<String> SverkaUfosPim() {
+
+        Connection pimCon = null;
+        ArrayList<String> guidsSverArray = new ArrayList<String>();
+        //получение соединения с бд и делаем свои бд приколы
+        try {
+            pimCon = bdConn.getPimConn();
+            Statement pimSverStatement = pimCon.createStatement();
+            ResultSet PimSverResult = pimSverStatement.executeQuery(puup.utils.utils.UfosPimStatSver());//выполнение запроса
+            while (PimSverResult.next()) {
+                guidsSverArray.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//рвем коннект.
+        try {
+            pimCon.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // System.out.print(" сверка по статусам: " + guidsSverArray.size()+";");
+        return guidsSverArray;
     }
 }

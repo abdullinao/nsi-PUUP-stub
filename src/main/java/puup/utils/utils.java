@@ -22,6 +22,15 @@ public class utils {
     }
 
 
+    public static String UfosPimStatSver() {
+
+        return " select v.guid from apps.OTR_ref_ubpandnubp_0_v v, ufos_ref.DC_ref_ubpandnubp@ufos_ref.otr.ru e " +
+                "where upper(v.guid)= upper(e.guid)and " +
+                " upper(v.status)!= upper(e.status)";
+
+    }
+
+
     public static String pimSqlReq(String guid) {
 
         return "begin\n" +

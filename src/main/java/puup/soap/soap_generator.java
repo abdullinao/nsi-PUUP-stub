@@ -22,12 +22,12 @@ public class soap_generator {
 
             // Print the SOAP Response
             //System.out.println("Ответ:");
-         //   try {
-          //      soapResponse.writeTo(System.out);
-         //   } catch (NullPointerException nul) {
-          //      System.out.println("\nСервис не дал ответ на соап запрос.");
-           // }
-           // System.out.println();
+            //   try {
+            //      soapResponse.writeTo(System.out);
+            //   } catch (NullPointerException nul) {
+            //      System.out.println("\nСервис не дал ответ на соап запрос.");
+            // }
+            // System.out.println();
 
             soapConnection.close();
         } catch (Exception e) {
@@ -52,9 +52,9 @@ public class soap_generator {
         soapMessage.saveChanges();
 
         /* вывод сообщения для дебуга */
-      //  System.out.println("SOAP запрос для вебсервиса:\n");
-       // soapMessage.writeTo(System.out);
-       // System.out.println("\n");
+        //  System.out.println("SOAP запрос для вебсервиса:\n");
+        // soapMessage.writeTo(System.out);
+        // System.out.println("\n");
 
         return soapMessage;
     }
