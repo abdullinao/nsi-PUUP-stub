@@ -49,17 +49,38 @@ public class main {
                     puup.bd.pim.SQLexecute(guidsToSend);
                     puup.bd.pim.SQLexecute(guidsToSver);
 
-                    System.out.println("К распространению по переотправке: " + guidsToSend.size());
-                    System.out.println("К распространению по сверке: " + guidsToSver.size());
+                    try {
+                        System.out.println("К распространению по переотправке: " + guidsToSend.size());
+
+                    } catch (NullPointerException nullPointerException) {
+                        System.out.println("Нет гуидов для отправки из пим по переотправке");
+                    }
+                    try {
+                        System.out.println("К распространению по сверке: " + guidsToSver.size());
+                    } catch (NullPointerException nullPointerException) {
+                        System.out.println("Нет гуидов для отправки из пим по сверке");
+                    }
+
+
 
                     guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
                     guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
 
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
-                    System.out.println("Соапом по переотправке: " + guidsToSend.size());
 
+                    try {
+                        System.out.println("Соапом по переотправке: " + guidsToSend.size());
+                    } catch (NullPointerException n) {
+                        System.out.println("Соапом по переотправке: 0");
+                    }
                     puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
-                    System.out.println("Соапом по сверке: " + guidsToSver.size());
+
+
+                    try {
+                        System.out.println("Соапом по сверке: " + guidsToSver.size());
+                    } catch (NullPointerException n) {
+                        System.out.println("Соапом по сверке: 0");
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();

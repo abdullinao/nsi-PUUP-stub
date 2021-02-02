@@ -48,7 +48,7 @@ public class ufos {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.print(" В уфосе изменилось: " + guidsArray.size()+";");
+        //System.out.print(" В уфосе изменилось: " + guidsArray.size()+";");
         return guidsArray;
     }
 }

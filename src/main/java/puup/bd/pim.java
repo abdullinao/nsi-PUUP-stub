@@ -35,7 +35,7 @@ public class pim {
                     }
                     //   System.out.print(" из пим: "+guidsArray.size()+";");
                 } catch (NullPointerException np) {
-                    System.out.print(" нет гуидов для отправки из пим;");
+                 //   System.out.print(" нет гуидов для отправки из пим;");
                 }
 
             } catch (Exception e) {
