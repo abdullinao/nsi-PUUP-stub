@@ -37,42 +37,38 @@ public class main {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        Runnable FUCKRUN = new Runnable() {
+        Runnable resendUfosPim = new Runnable() {
             ArrayList<String> guidsToSend;
+            ArrayList<String> guidsToSver;
+
+            public void run() {
 
 
-             Runnable resendUfosPim = new Runnable() {
-                ArrayList<String> guidsToSend;
-                ArrayList<String> guidsToSver;
+                puup.utils.utils.printTime();
+                try {
+                    puup.bd.pim.SQLexecute(guidsToSend);
+                    puup.bd.pim.SQLexecute(guidsToSver);
 
-                public void run() {
+                    System.out.println("К распространению по переотправке: " + guidsToSend.size());
+                    System.out.println("К распространению по сверке: " + guidsToSver.size());
 
-                    puup.utils.utils.printTime();
-                    try {
-                        puup.bd.pim.SQLexecute(guidsToSend);
-                        puup.bd.pim.SQLexecute(guidsToSver);
+                    guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
+                    guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
 
-                        System.out.println("К распространению по переотправке: " + guidsToSend.size());
-                        System.out.println("К распространению по сверке: " + guidsToSver.size());
+                    puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
+                    System.out.println("Соапом по переотправке: " + guidsToSend.size());
 
-                        guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
-                        guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
+                    puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
+                    System.out.println("Соапом по сверке: " + guidsToSver.size());
 
-                        puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
-                        System.out.println("Соапом по переотправке: " + guidsToSend.size());
-
-                        puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
-                        System.out.println("Соапом по сверке: " + guidsToSver.size());
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            };
+            }
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(FUCKRUN, 0, prop1.getTimeout() - prop1.getTimelag(), TimeUnit.SECONDS);//минус 10 сек
+        executor.scheduleAtFixedRate(resendUfosPim, 0, prop1.getTimeout() - prop1.getTimelag(), TimeUnit.SECONDS);//минус 10 сек
         //на лаги, лучше отправить запись дважды чем не отправить))
 
 
