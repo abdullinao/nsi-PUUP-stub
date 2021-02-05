@@ -71,4 +71,33 @@ public class pim {
         // System.out.print(" сверка по статусам: " + guidsSverArray.size()+";");
         return guidsSverArray;
     }
+
+
+
+
+
+    public static ArrayList<String> ChangedPimd() {
+
+        Connection pimCon = null;
+        ArrayList<String> guidChangedInPim = new ArrayList<String>();
+
+        try {
+            pimCon = bdConn.getPimConn();
+            Statement pimChangedStatement = pimCon.createStatement();
+            ResultSet PimSverResult = pimChangedStatement.executeQuery(puup.utils.utils.UpdatedPim());//выполнение запроса
+            while (PimSverResult.next()) {
+                guidChangedInPim.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//рвем коннект.
+        try {
+            pimCon.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // System.out.print(" сверка по статусам: " + guidsSverArray.size()+";");
+        return guidChangedInPim;
+    }
 }

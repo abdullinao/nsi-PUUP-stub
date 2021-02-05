@@ -1,6 +1,7 @@
 package puup.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class utils {
@@ -13,14 +14,24 @@ public class utils {
             e.printStackTrace();
         }
     }
+
     public static String UfosSqlReq() {
 
         return "select  D.globaldocid from ufos_ref.dc_ref_ubpandnubp ubp\n" +
                 "join ufos_ref.dict D on ubp.docid=D.dictid" +
-                " where  D.LASTMODIFYDATE >=SYSDATE  - INTERVAL '"+ prop1.getTimeout()+"' SECOND ";
+                " where  D.LASTMODIFYDATE >=SYSDATE  - INTERVAL '" + prop1.getTimeout() + "' SECOND ";
 
     }
 
+
+    public static String UpdatedPim() {
+
+        return "select guid\n" +
+                " from APPS.OTR_REF_UBPandNUBP_0_V where  \n" +
+                "   LAST_UPDATE_DATE >=SYSDATE  - INTERVAL '" + prop1.getTimeout() + "' SECOND ";
+
+
+    }
 
     public static String UfosPimStatSver() {
 
@@ -57,8 +68,13 @@ public class utils {
         System.out.println("\n");
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        System.out.println( sdf.format(cal.getTime()) );
+        System.out.println(sdf.format(cal.getTime()));
     }
 
+
+    public static void compare(ArrayList<String> guidsOld, ArrayList<String> guidsNew) {
+
+
+    }
 
 }

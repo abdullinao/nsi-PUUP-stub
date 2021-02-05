@@ -31,7 +31,6 @@ public class main {
      * вызов метода каждые сколько-то секунд
      */
     public static void mainJob() {
-
         //        try {
 //            puup.soap.soap_initialize.eh_initialize(guidsToSend);
 //        } catch (Exception e) {
@@ -40,31 +39,33 @@ public class main {
         Runnable resendUfosPim = new Runnable() {
             ArrayList<String> guidsToSend;
             ArrayList<String> guidsToSver;
+            ArrayList<String> guidsChangedInPim;
+            int Resendcoun = 0;
 
             public void run() {
 
 
                 puup.utils.utils.printTime();
                 try {
-                    puup.bd.pim.SQLexecute(guidsToSend);
-                    puup.bd.pim.SQLexecute(guidsToSver);
+                    // puup.bd.pim.SQLexecute(guidsToSend);
+                    //puup.bd.pim.SQLexecute(guidsToSver);
 
-                    try {
-                        System.out.println("К распространению по переотправке: " + guidsToSend.size());
+                    //    try {
+                    //        System.out.println("К распространению по переотправке: " + guidsToSend.size());
 
-                    } catch (NullPointerException nullPointerException) {
-                        System.out.println("Нет гуидов для отправки из пим по переотправке");
-                    }
-                    try {
-                        System.out.println("К распространению по сверке: " + guidsToSver.size());
-                    } catch (NullPointerException nullPointerException) {
-                        System.out.println("Нет гуидов для отправки из пим по сверке");
-                    }
-
+                    //    } catch (NullPointerException nullPointerException) {
+                    //        System.out.println("Нет гуидов для отправки из пим по переотправке");
+                    //    }
+                    //    try {
+                    //        System.out.println("К распространению по сверке: " + guidsToSver.size());
+                    //    } catch (NullPointerException nullPointerException) {
+                    //        System.out.println("Нет гуидов для отправки из пим по сверке");
+                    //    }
 
 
                     guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
                     guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
+                    guidsChangedInPim = puup.bd.pim.ChangedPimd();//получаем список гуидов из уфоса измененных
 
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
 
@@ -82,6 +83,10 @@ public class main {
                         System.out.println("Соапом по сверке: 0");
                     }
 
+                    puup.bd.pim.SQLexecute(guidsChangedInPim);
+                    System.out.println("Изменных в пим к отправке: " + guidsChangedInPim.size());
+                    Resendcoun = Resendcoun + guidsChangedInPim.size();
+                    System.out.println("Total: " + Resendcoun);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -89,11 +94,10 @@ public class main {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(resendUfosPim, 0, prop1.getTimeout() - prop1.getTimelag(), TimeUnit.SECONDS);//минус 10 сек
+        executor.scheduleAtFixedRate(resendUfosPim, 0,
+                prop1.getTimeout() - prop1.getTimelag(), TimeUnit.SECONDS);//минус 10 сек
         //на лаги, лучше отправить запись дважды чем не отправить))
 
 
     }
-
-
 }

@@ -27,11 +27,8 @@ public class bdConn {
                             + ":" + prop1.getPimPort() + "/" + prop1.getPimServicename() + " "
                     , prop1.getPimUser(), prop1.getPimPass());
         } catch (SQLException e) {
-
             System.out.println("Ошибка подключения к бд пим!");
             e.printStackTrace();
-
-
         }
         return pimCon;
     }
@@ -39,7 +36,7 @@ public class bdConn {
 
     public static Connection getUfosConn() {
         test();
-      //  System.out.println("завершил фазу тест");
+        //  System.out.println("завершил фазу тест");
         Connection ufosCon = null;
         try {
 
@@ -49,17 +46,17 @@ public class bdConn {
 //                    , prop.getUfosUser(), prop.getUfosPass());
 //
 //
-         //   System.out.println("загружеенные параметры:");
-         //   System.out.println("тнс: " + prop1.getUfosTns());
-          //  System.out.println("user: " + prop1.getUfosUser());
-          //  System.out.println("pwd: " + prop1.getUfosPass());
+            //   System.out.println("загружеенные параметры:");
+            //   System.out.println("тнс: " + prop1.getUfosTns());
+            //  System.out.println("user: " + prop1.getUfosUser());
+            //  System.out.println("pwd: " + prop1.getUfosPass());
 
 
             String dbUrl = "jdbc:oracle:thin:@" + prop1.getUfosTns();
 
-          //  System.out.println(dbUrl);
+            //  System.out.println(dbUrl);
 
-           // System.out.println("начинаю уфоскон");
+            // System.out.println("начинаю уфоскон");
             ufosCon = DriverManager.getConnection(dbUrl, prop1.getUfosUser(), prop1.getUfosPass());
 
             //System.out.println("получил уфос кон");
@@ -74,7 +71,7 @@ public class bdConn {
     }
 
     private static void test() {
-      //  System.out.println("-------- Попытка подключения к бд... ------");
+        //  System.out.println("-------- Попытка подключения к бд... ------");
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
 
@@ -85,7 +82,7 @@ public class bdConn {
 
         }
 
-     //   System.out.println("Драйвер найден! Подключаемся...");
+        //   System.out.println("Драйвер найден! Подключаемся...");
 
     }
 }

@@ -1,6 +1,8 @@
-D:\git\puup-stub\nsi-PUUP-stub\src\main\java\puup\main.java
-D:\git\puup-stub\nsi-PUUP-stub\src\main\java\puup\bdConn.java
-D:\git\puup-stub\nsi-PUUP-stub\src\main\java\puup\soap\soap_generator.java
-D:\git\puup-stub\nsi-PUUP-stub\src\main\java\puup\utils.java
-D:\git\puup-stub\nsi-PUUP-stub\src\main\java\puup\prop.java
-D:\git\puup-stub\nsi-PUUP-stub\src\main\java\puup\soap\soap_initialize.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\bd\ufos.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\main.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\bd\bdConn.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\soap\soap_generator.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\utils\prop.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\utils\utils.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\bd\pim.java
+F:\Github\nsi-PUUP-stub\src\main\java\puup\soap\soap_initialize.java
