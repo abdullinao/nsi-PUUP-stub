@@ -37,11 +37,11 @@ public class main {
 //            e.printStackTrace();
 //        }
         Runnable resendUfosPim = new Runnable() {
-            ArrayList<String> guidsToSend;
-            ArrayList<String> guidsToSver;
-            ArrayList<String> guidsOrgcodesChangedInPim;
-            ArrayList<String> guidsChangedInPim;
-            ArrayList<String> OrgcodesChangedInPim;
+            ArrayList<String> guidsToSend = new ArrayList<String>();
+            ArrayList<String> guidsToSver = new ArrayList<String>();
+            ArrayList<String> guidsOrgcodesChangedInPim = new ArrayList<String>();
+            ArrayList<String> guidsChangedInPim = new ArrayList<String>();
+            ArrayList<String> OrgcodesChangedInPim = new ArrayList<String>();
             int Resendcoun = 0;
             int ResendcounArchive = 0;
 
@@ -49,7 +49,12 @@ public class main {
 
 
                 puup.utils.utils.printTime();
+                System.out.println("=================");
                 try {
+
+
+                    //блок для переотпрваки тех, кто сумел измениться в уфосе. но если в уфос изменилась в пим
+                    //могла не меняться по-этому пришлось убрать
                     // puup.bd.pim.SQLexecute(guidsToSend);
                     //puup.bd.pim.SQLexecute(guidsToSver);
 
@@ -64,13 +69,24 @@ public class main {
                     //    } catch (NullPointerException nullPointerException) {
                     //        System.out.println("Нет гуидов для отправки из пим по сверке");
                     //    }
-
-
+                    //блок получения измененных в уфосе
+                    puup.utils.utils.printTime();
+                    System.out.println("получаю измененные из уфоса для переотправки");
                     guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
-                    guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
+
+                    //блок получения изменных в пим
+                    puup.utils.utils.printTime();
+                    System.out.println("получаю измененные в пим");
                     guidsOrgcodesChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
-                    guidsChangedInPim = null;
-                    OrgcodesChangedInPim = null;
+                    //блок получения сверки статусов между уфос и пим
+                    puup.utils.utils.printTime();
+                    System.out.println("получаю сверку");
+                    guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
+
+                    System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
+
+                    guidsChangedInPim.clear();
+                    OrgcodesChangedInPim.clear();
                     //разделение guid;orgcode на разные массивы
                     try {
                         for (int i = 0; i < guidsOrgcodesChangedInPim.size(); ++i) {
@@ -83,38 +99,32 @@ public class main {
                                 e.printStackTrace();
                             }
                         }
-                    } catch (NullPointerException np) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-//переотправка по переотправке
+                    //переотправка по переотправке
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
-                    try {
-                        System.out.println("Соапом по переотправке: " + guidsToSend.size());
-                    } catch (NullPointerException n) {
-                        System.out.println("Соапом по переотправке: 0");
-                    }
-
+                    System.out.println("Соапом по переотправке: " + guidsToSend.size());
 
                     //переотправка по сверке
                     puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
+                    System.out.println("Соапом по сверке: " + guidsToSver.size());
 
-                    try {
-                        System.out.println("Соапом по сверке: " + guidsToSver.size());
-                    } catch (NullPointerException n) {
-                        System.out.println("Соапом по сверке: 0");
-                    }
 
                     //распространение архивных
+
                     puup.bd.pim.SQLexecuteForOrgcodes(OrgcodesChangedInPim);
                     System.out.println("Архивных в пим к отправке: " + OrgcodesChangedInPim.size());
                     ResendcounArchive = ResendcounArchive + OrgcodesChangedInPim.size();
-                    System.out.println("Total archive: " + ResendcounArchive);
+                    System.out.println("Всего переотправил архивных: " + ResendcounArchive);
 
-//распространение измененных
+
+                    //распространение измененных
                     puup.bd.pim.SQLexecute(guidsChangedInPim);
                     System.out.println("Изменных в пим к отправке: " + guidsChangedInPim.size());
                     Resendcoun = Resendcoun + guidsChangedInPim.size();
-                    System.out.println("Total active: " + Resendcoun);
+                    System.out.println("Всего переотправил активных: " + Resendcoun);
 
 
                 } catch (Exception e) {
@@ -125,7 +135,7 @@ public class main {
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(resendUfosPim, 0,
-                prop1.getTimeout() - prop1.getTimelag(), TimeUnit.SECONDS);//минус 10 сек
+                prop1.getTimeout() - prop1.getTimelag(), TimeUnit.SECONDS);// минус Timelag   сек задается в конфиге
         //на лаги, лучше отправить запись дважды чем не отправить))
 
 

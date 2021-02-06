@@ -81,7 +81,7 @@ public class utils {
                 "                         )) loop\n" +
                 "        OTR_MTL_JMS.SEND_MESS(p_guid              => l_lines.attribute2,\n" +
                 "    p_class_intern_name => l_lines.dict_name,\n" +
-                "    p_oper              => 'update');\n" +
+                "    p_oper              => 'toUFOS_EXP');\n" +
                 "    null;\n" +
                 "  end loop;\n" +
                 "commit;\n" +
