@@ -3,10 +3,7 @@ package puup.bd;
 import puup.soap.soap_generator;
 import puup.utils.prop;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class pim {
@@ -35,7 +32,7 @@ public class pim {
                     }
                     //   System.out.print(" из пим: "+guidsArray.size()+";");
                 } catch (NullPointerException np) {
-                 //   System.out.print(" нет гуидов для отправки из пим;");
+                    //   System.out.print(" нет гуидов для отправки из пим;");
                 }
 
             } catch (Exception e) {
@@ -46,6 +43,26 @@ public class pim {
     }
 
 
+    public static void SQLexecuteForOrgcodes(ArrayList<String> orgcodesArray) throws SQLException {
+        if (prop1.getSendPimConf().equalsIgnoreCase("y")) {
+            Connection pimCon = null;
+            try {
+                pimCon = bdConn.getPimConn();
+                Statement pimStatement = pimCon.createStatement();
+                try {
+                    for (int i = 0; i < orgcodesArray.size(); ++i) {
+
+                        pimStatement.execute(puup.utils.utils.SendArchiveFromOrgcode(orgcodesArray.get(i)));//отправляем скл запрос,запрос записан
+                    }
+                } catch (NullPointerException np) {
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            pimCon.close();
+        } else System.out.println(" отправка из пим отключена.");
+    }
 
     public static ArrayList<String> SverkaUfosPim() {
 
@@ -73,10 +90,7 @@ public class pim {
     }
 
 
-
-
-
-    public static ArrayList<String> ChangedPimd() {
+    public static ArrayList<String> ChangedPim() {
 
         Connection pimCon = null;
         ArrayList<String> guidChangedInPim = new ArrayList<String>();
@@ -85,14 +99,22 @@ public class pim {
             pimCon = bdConn.getPimConn();
             Statement pimChangedStatement = pimCon.createStatement();
             ResultSet PimSverResult = pimChangedStatement.executeQuery(puup.utils.utils.UpdatedPim());//выполнение запроса
+
             while (PimSverResult.next()) {
-                guidChangedInPim.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса
+                //guid;orgcode
+                try {
+                    guidChangedInPim.add(PimSverResult.getString(1) + ";" + PimSverResult.getString(2));//заполнение массива гуидами из запроса
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            PimSverResult.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 //рвем коннект.
         try {
+
             pimCon.close();
         } catch (Exception e) {
             e.printStackTrace();

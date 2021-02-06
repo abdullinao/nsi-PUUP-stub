@@ -39,8 +39,11 @@ public class main {
         Runnable resendUfosPim = new Runnable() {
             ArrayList<String> guidsToSend;
             ArrayList<String> guidsToSver;
+            ArrayList<String> guidsOrgcodesChangedInPim;
             ArrayList<String> guidsChangedInPim;
+            ArrayList<String> OrgcodesChangedInPim;
             int Resendcoun = 0;
+            int ResendcounArchive = 0;
 
             public void run() {
 
@@ -65,17 +68,35 @@ public class main {
 
                     guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
                     guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
-                    guidsChangedInPim = puup.bd.pim.ChangedPimd();//получаем список гуидов из уфоса измененных
+                    guidsOrgcodesChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
+                    guidsChangedInPim = null;
+                    OrgcodesChangedInPim = null;
+                    //разделение guid;orgcode на разные массивы
+                    try {
+                        for (int i = 0; i < guidsOrgcodesChangedInPim.size(); ++i) {
+                            try {
+                                System.out.println(i);
+                                String[] split = guidsOrgcodesChangedInPim.get(i).split(";");
+                                guidsChangedInPim.add(split[0]);
+                                OrgcodesChangedInPim.add(split[1]);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (NullPointerException np) {
+                    }
 
+//переотправка по переотправке
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
-
                     try {
                         System.out.println("Соапом по переотправке: " + guidsToSend.size());
                     } catch (NullPointerException n) {
                         System.out.println("Соапом по переотправке: 0");
                     }
-                    puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
 
+
+                    //переотправка по сверке
+                    puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
 
                     try {
                         System.out.println("Соапом по сверке: " + guidsToSver.size());
@@ -83,10 +104,19 @@ public class main {
                         System.out.println("Соапом по сверке: 0");
                     }
 
+                    //распространение архивных
+                    puup.bd.pim.SQLexecuteForOrgcodes(OrgcodesChangedInPim);
+                    System.out.println("Архивных в пим к отправке: " + OrgcodesChangedInPim.size());
+                    ResendcounArchive = ResendcounArchive + OrgcodesChangedInPim.size();
+                    System.out.println("Total archive: " + ResendcounArchive);
+
+//распространение измененных
                     puup.bd.pim.SQLexecute(guidsChangedInPim);
                     System.out.println("Изменных в пим к отправке: " + guidsChangedInPim.size());
                     Resendcoun = Resendcoun + guidsChangedInPim.size();
-                    System.out.println("Total: " + Resendcoun);
+                    System.out.println("Total active: " + Resendcoun);
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
