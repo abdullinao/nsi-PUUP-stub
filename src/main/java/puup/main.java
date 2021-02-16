@@ -69,6 +69,7 @@ public class main {
                     //    } catch (NullPointerException nullPointerException) {
                     //        System.out.println("Нет гуидов для отправки из пим по сверке");
                     //    }
+
                     //блок получения измененных в уфосе
                     puup.utils.utils.printTime();
                     System.out.println("получаю измененные из уфоса для переотправки");
@@ -83,7 +84,7 @@ public class main {
                     System.out.println("получаю сверку");
                     guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
 
-                    System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
+                   // System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
 
                     guidsChangedInPim.clear();
                     OrgcodesChangedInPim.clear();
@@ -91,7 +92,7 @@ public class main {
                     try {
                         for (int i = 0; i < guidsOrgcodesChangedInPim.size(); ++i) {
                             try {
-                                System.out.println(i);
+                               // System.out.println(i);
                                 String[] split = guidsOrgcodesChangedInPim.get(i).split(";");
                                 guidsChangedInPim.add(split[0]);
                                 OrgcodesChangedInPim.add(split[1]);
@@ -102,6 +103,19 @@ public class main {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
+//dbg
+//                    System.out.println("/////////");
+//                    for (int i = 0; i < OrgcodesChangedInPim.size(); ++i) {
+//                        try {
+//                            System.out.println(i);
+//                            System.out.println(OrgcodesChangedInPim.get(i));
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    System.out.println("/////////");
 
                     //переотправка по переотправке
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
@@ -126,6 +140,10 @@ public class main {
                     Resendcoun = Resendcoun + guidsChangedInPim.size();
                     System.out.println("Всего переотправил активных: " + Resendcoun);
 
+                    //Тест распространения всех изменееых из в пур
+
+                    puup.bd.pim.sendToExp(guidsToSend);
+                    System.out.println("переотправил в пур: " + guidsToSend.size());
 
                 } catch (Exception e) {
                     e.printStackTrace();

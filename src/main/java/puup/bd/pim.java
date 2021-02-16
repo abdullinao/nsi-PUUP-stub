@@ -43,6 +43,31 @@ public class pim {
     }
 
 
+    public static void sendToExp(ArrayList<String> guidsArray) throws SQLException {
+        if (prop1.getSendPimConf().equalsIgnoreCase("y")) {
+            Connection pimCon = null;
+            try {
+                pimCon = bdConn.getPimConn();
+                Statement pimStatement = pimCon.createStatement();
+                try {
+                    for (int i = 0; i < guidsArray.size(); ++i) {
+
+                        pimStatement.execute(puup.utils.utils.sendToExp(guidsArray.get(i)));//отправляем скл запрос,запрос записан
+
+                    }
+
+                } catch (NullPointerException np) {
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            pimCon.close();
+        } else System.out.println(" отправка из пим отключена.");
+    }
+
+
     public static void SQLexecuteForOrgcodes(ArrayList<String> orgcodesArray) throws SQLException {
         if (prop1.getSendPimConf().equalsIgnoreCase("y")) {
             Connection pimCon = null;
