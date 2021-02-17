@@ -51,6 +51,10 @@ public class main {
                 puup.utils.utils.printTime();
                 System.out.println("=================");
                 try {
+                    //Тест распространения всех изменееых из в пур
+
+                    puup.bd.pim.sendToExp(guidsToSend);
+                    System.out.println("переотправил в пур: " + guidsToSend.size());
 
 
                     //блок для переотпрваки тех, кто сумел измениться в уфосе. но если в уфос изменилась в пим
@@ -140,10 +144,6 @@ public class main {
                     Resendcoun = Resendcoun + guidsChangedInPim.size();
                     System.out.println("Всего переотправил активных: " + Resendcoun);
 
-                    //Тест распространения всех изменееых из в пур
-
-                    puup.bd.pim.sendToExp(guidsToSend);
-                    System.out.println("переотправил в пур: " + guidsToSend.size());
 
                 } catch (Exception e) {
                     e.printStackTrace();
