@@ -53,8 +53,8 @@ public class main {
                 try {
                     //Тест распространения всех изменееых из в пур
 
-                    puup.bd.pim.sendToExp(guidsToSend);
-                    System.out.println("переотправил в пур: " + guidsToSend.size());
+                   // puup.bd.pim.sendToExp(guidsToSend);
+                  // System.out.println("переотправил в пур: " + guidsToSend.size());
 
 
                     //блок для переотпрваки тех, кто сумел измениться в уфосе. но если в уфос изменилась в пим
@@ -124,11 +124,12 @@ public class main {
                     //переотправка по переотправке
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
                     System.out.println("Соапом по переотправке: " + guidsToSend.size());
+                    guidsToSend.clear();
 
                     //переотправка по сверке
                     puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
                     System.out.println("Соапом по сверке: " + guidsToSver.size());
-
+                    guidsToSver.clear();
 
                     //распространение архивных
 
@@ -144,6 +145,10 @@ public class main {
                     Resendcoun = Resendcoun + guidsChangedInPim.size();
                     System.out.println("Всего переотправил активных: " + Resendcoun);
 
+                    //повторная отправка в exp/tse
+                    System.out.println("---повторная отправка активных отдельно адресно");
+                    puup.bd.pim.SendAddr(guidsChangedInPim);
+                    System.out.println("В этом проходе: " + guidsChangedInPim.size());
 
                 } catch (Exception e) {
                     e.printStackTrace();

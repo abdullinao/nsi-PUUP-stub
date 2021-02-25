@@ -1,6 +1,5 @@
 package puup.bd;
 
-import puup.soap.soap_generator;
 import puup.utils.prop;
 
 import java.sql.*;
@@ -43,7 +42,7 @@ public class pim {
     }
 
 
-    public static void sendToExp(ArrayList<String> guidsArray) throws SQLException {
+    public static void SendAddr(ArrayList<String> guidsArray) throws SQLException {
         if (prop1.getSendPimConf().equalsIgnoreCase("y")) {
             Connection pimCon = null;
             try {
@@ -53,6 +52,7 @@ public class pim {
                     for (int i = 0; i < guidsArray.size(); ++i) {
 
                         pimStatement.execute(puup.utils.utils.sendToExp(guidsArray.get(i)));//отправляем скл запрос,запрос записан
+                        pimStatement.execute(puup.utils.utils.sendToTSE(guidsArray.get(i)));//отправляем скл запрос,запрос записан
 
                     }
 
@@ -77,7 +77,9 @@ public class pim {
                 try {
                     for (int i = 0; i < orgcodesArray.size(); ++i) {
 
-                        pimStatement.execute(puup.utils.utils.SendArchiveFromOrgcode(orgcodesArray.get(i)));//отправляем скл запрос,запрос записан
+                        pimStatement.execute(puup.utils.utils.SendArchiveFromOrgcodeToExp(orgcodesArray.get(i)));//отправляем скл запрос,запрос записан
+                        pimStatement.execute(puup.utils.utils.SendArchiveFromOrgcodeToTSE(orgcodesArray.get(i)));
+
                     }
                 } catch (NullPointerException np) {
                 }
