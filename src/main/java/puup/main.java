@@ -7,6 +7,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * todo
+ * по лицевыс счетам перезаталкивание по отстувющим в пиме - сверка +
+ * перезаталкивание по статусам между уфосом и пимом - по статсам слишком душно, т.к в пиме только актив архив переотправка всех измененных +
+ * <p>
+ * распространить только измененные в пиме по всем подпискам +
+ */
+
 public class main {
     private static puup.utils.prop prop1;
 
@@ -41,6 +50,7 @@ public class main {
             ArrayList<String> guidsToSver = new ArrayList<String>();
             ArrayList<String> guidsOrgcodesChangedInPim = new ArrayList<String>();
             ArrayList<String> guidsChangedInPim = new ArrayList<String>();
+            ArrayList<String> guidsNotInPim = new ArrayList<String>();
             ArrayList<String> OrgcodesChangedInPim = new ArrayList<String>();
             int Resendcoun = 0;
             int ResendcounArchive = 0;
@@ -53,8 +63,8 @@ public class main {
                 try {
                     //Тест распространения всех изменееых из в пур
 
-                   // puup.bd.pim.sendToExp(guidsToSend);
-                  // System.out.println("переотправил в пур: " + guidsToSend.size());
+                    // puup.bd.pim.sendToExp(guidsToSend);
+                    // System.out.println("переотправил в пур: " + guidsToSend.size());
 
 
                     //блок для переотпрваки тех, кто сумел измениться в уфосе. но если в уфос изменилась в пим
@@ -74,39 +84,28 @@ public class main {
                     //        System.out.println("Нет гуидов для отправки из пим по сверке");
                     //    }
 
-                    //блок получения измененных в уфосе
+                    //блок получения измененных в уфосе +
                     puup.utils.utils.printTime();
-                    System.out.println("получаю измененные из уфоса для переотправки");
+                    System.out.println("получаю измененные из уфоса лс для перезаталкивания");
                     guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
 
-                    //блок получения изменных в пим
+                    //блок получения изменных в пим +
                     puup.utils.utils.printTime();
                     System.out.println("получаю измененные в пим");
-                    guidsOrgcodesChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
-                    //блок получения сверки статусов между уфос и пим
+                    guidsChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
+
+                    //блок получения разницы между пимом и уфосом
                     puup.utils.utils.printTime();
-                    System.out.println("получаю сверку");
-                    guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
+                    System.out.println("получаю отсутствующие в пим");
+                    guidsNotInPim = puup.bd.pim.SverPersAccNotInPim();//получаем список гуидов;оргкодов из пим измененных
 
-                   // System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
+                    //блок получения сверки статусов между уфос и пим
+//                    puup.utils.utils.printTime();
+//                    System.out.println("получаю сверку");
+//                    guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
 
-                    guidsChangedInPim.clear();
-                    OrgcodesChangedInPim.clear();
-                    //разделение guid;orgcode на разные массивы
-                    try {
-                        for (int i = 0; i < guidsOrgcodesChangedInPim.size(); ++i) {
-                            try {
-                               // System.out.println(i);
-                                String[] split = guidsOrgcodesChangedInPim.get(i).split(";");
-                                guidsChangedInPim.add(split[0]);
-                                OrgcodesChangedInPim.add(split[1]);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    // System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
+
 
 //dbg
 //                    System.out.println("/////////");
@@ -126,18 +125,18 @@ public class main {
                     System.out.println("Соапом по переотправке: " + guidsToSend.size());
                     guidsToSend.clear();
 
-                    //переотправка по сверке
-                    puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
-                    System.out.println("Соапом по сверке: " + guidsToSver.size());
-                    guidsToSver.clear();
+                   // переотправка по отсутствию в пим
+                    puup.soap.soap_initialize.eh_initialize(guidsNotInPim);//переотправляем их соапом
+                    System.out.println("Соапом по отсуствующим в пиме: " + guidsNotInPim.size());
+                    guidsNotInPim.clear();
 
                     //распространение архивных
-
-                    puup.bd.pim.SQLexecuteForOrgcodes(OrgcodesChangedInPim);
-                    System.out.println("Архивных в пим к отправке: " + OrgcodesChangedInPim.size());
-                    ResendcounArchive = ResendcounArchive + OrgcodesChangedInPim.size();
-                    System.out.println("Всего переотправил архивных: " + ResendcounArchive);
-
+//
+//                    puup.bd.pim.SQLexecuteForOrgcodes(OrgcodesChangedInPim);
+//                    System.out.println("Архивных в пим к отправке: " + OrgcodesChangedInPim.size());
+//                    ResendcounArchive = ResendcounArchive + OrgcodesChangedInPim.size();
+//                    System.out.println("Всего переотправил архивных: " + ResendcounArchive);
+//
 
                     //распространение измененных
                     puup.bd.pim.SQLexecute(guidsChangedInPim);
@@ -145,10 +144,10 @@ public class main {
                     Resendcoun = Resendcoun + guidsChangedInPim.size();
                     System.out.println("Всего переотправил активных: " + Resendcoun);
 
-                    //повторная отправка в exp/tse
-                    System.out.println("---повторная отправка активных отдельно адресно");
-                    puup.bd.pim.SendAddr(guidsChangedInPim);
-                    System.out.println("В этом проходе: " + guidsChangedInPim.size());
+//                    //повторная отправка в exp/tse
+//                    System.out.println("---повторная отправка активных отдельно адресно");
+//                    puup.bd.pim.SendAddr(guidsChangedInPim);
+//                    System.out.println("В этом проходе: " + guidsChangedInPim.size());
 
                 } catch (Exception e) {
                     e.printStackTrace();

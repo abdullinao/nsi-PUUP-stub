@@ -25,7 +25,7 @@ public class ufos {
 
 
             Statement UfosStatement = UfosCon.createStatement();
-            ResultSet UfosResult = UfosStatement.executeQuery(utils.UfosSqlReq()); // вставить скл запрос
+            ResultSet UfosResult = UfosStatement.executeQuery(utils.ChangedInUfosPersaccounts()); // вставить скл запрос
 
             while (UfosResult.next()) {
                 // UfosResult.next();

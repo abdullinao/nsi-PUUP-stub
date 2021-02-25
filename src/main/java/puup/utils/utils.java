@@ -15,6 +15,39 @@ public class utils {
         }
     }
 
+
+    /**
+     *начало блока с утилсами по лицевым счетам
+     */
+
+    public static String ChangedInUfosPersaccounts() {
+
+        return "select  D.globaldocid from ufos_ref.dc_ref_persaccount ubp\n" +
+                "join ufos_ref.dict D on ubp.docid=D.dictid" +
+                " where  D.LASTMODIFYDATE >=SYSDATE  - INTERVAL '" + prop1.getTimeout() + "' SECOND ";
+
+    }
+    public static String UpdatedPersPim() {
+
+        return "select guid\n" +
+                " from APPS.OTR_ref_persaccount_0_V where  \n" +
+                "   LAST_UPDATE_DATE >=SYSDATE  - INTERVAL '" + prop1.getTimeout() + "' SECOND ";
+
+
+    }
+
+    public static String SverPersNotInPim() {
+
+        return "  select   guid from ufos_Ref.dc_ref_persaccount@ufos_ref.otr.ru ufos join ufos_ref.dict@ufos_ref.otr.ru d on d.dictid=ufos.docid\n" +
+                "    where d.globaldocid not in (select guid from apps.otr_ref_persaccount_0_v) ";
+
+    }
+
+    /**
+     *конец блока с утилсами по лицевым счетам
+     */
+
+    //измененные в уфосе
     public static String UfosSqlReq() {
 
         return "select  D.globaldocid from ufos_ref.dc_ref_ubpandnubp ubp\n" +
@@ -24,6 +57,11 @@ public class utils {
     }
 
 
+
+//отсутсвтуют в пим
+
+
+//обновленные в пим
     public static String UpdatedPim() {
 
         return "select guid, orgcode\n" +

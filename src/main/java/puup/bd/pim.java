@@ -117,6 +117,31 @@ public class pim {
     }
 
 
+    public static ArrayList<String> SverPersAccNotInPim() {
+
+        Connection pimCon = null;
+        ArrayList<String> guidsSverArray = new ArrayList<String>();
+        //получение соединения с бд и делаем свои бд приколы
+        try {
+            pimCon = bdConn.getPimConn();
+            Statement pimSverStatement = pimCon.createStatement();
+            ResultSet PimSverResult = pimSverStatement.executeQuery(puup.utils.utils.SverPersNotInPim());//выполнение запроса
+            while (PimSverResult.next()) {
+                guidsSverArray.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//рвем коннект.
+        try {
+            pimCon.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // System.out.print(" сверка по статусам: " + guidsSverArray.size()+";");
+        return guidsSverArray;
+    }
+
     public static ArrayList<String> ChangedPim() {
 
         Connection pimCon = null;
@@ -125,12 +150,12 @@ public class pim {
         try {
             pimCon = bdConn.getPimConn();
             Statement pimChangedStatement = pimCon.createStatement();
-            ResultSet PimSverResult = pimChangedStatement.executeQuery(puup.utils.utils.UpdatedPim());//выполнение запроса
+            ResultSet PimSverResult = pimChangedStatement.executeQuery(puup.utils.utils.UpdatedPersPim());//выполнение запроса
 
             while (PimSverResult.next()) {
                 //guid;orgcode
                 try {
-                    guidChangedInPim.add(PimSverResult.getString(1) + ";" + PimSverResult.getString(2));//заполнение массива гуидами из запроса
+                    guidChangedInPim.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса по лс
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
