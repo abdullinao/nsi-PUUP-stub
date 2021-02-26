@@ -24,7 +24,7 @@ public class utils {
 
         return "select  D.globaldocid from ufos_ref.dc_ref_persaccount ubp\n" +
                 "join ufos_ref.dict D on ubp.docid=D.dictid" +
-                " where  D.LASTMODIFYDATE >=SYSDATE  - INTERVAL '" + prop1.getTimeout() + "' SECOND ";
+                " where  D.LASTMODIFYDATE >=SYSDATE  - INTERVAL '" + prop1.getTimeout() + "' SECOND and status in ('ACTIVE','ARCHIVE') ";
 
     }
     public static String UpdatedPersPim() {
@@ -39,7 +39,7 @@ public class utils {
     public static String SverPersNotInPim() {
 
         return "  select   guid from ufos_Ref.dc_ref_persaccount@ufos_ref.otr.ru ufos join ufos_ref.dict@ufos_ref.otr.ru d on d.dictid=ufos.docid\n" +
-                "    where d.globaldocid not in (select guid from apps.otr_ref_persaccount_0_v) ";
+                "    where ufos.status in ('ACTIVE','ARCHIVE') and d.globaldocid not in (select guid from apps.otr_ref_persaccount_0_v) ";
 
     }
 
