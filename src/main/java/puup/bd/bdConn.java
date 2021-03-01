@@ -1,5 +1,7 @@
 package puup.bd;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import puup.utils.prop;
 
 import java.sql.Connection;
@@ -9,6 +11,10 @@ import java.sql.SQLException;
 public class bdConn {
     private static prop prop1;
 
+
+    private static final Logger logger = LogManager.getLogger();
+    // logger.info("коннект с пим установлен");
+//  logger.error("Ошибка подключения к бд пим", e);
     static {
         try {
             prop1 = new prop();
@@ -26,7 +32,10 @@ public class bdConn {
                     "jdbc:oracle:thin:@" + prop1.getPimBdurl()
                             + ":" + prop1.getPimPort() + "/" + prop1.getPimServicename() + " "
                     , prop1.getPimUser(), prop1.getPimPass());
+            logger.info("коннект с пим установлен");
         } catch (SQLException e) {
+            logger.error("Ошибка подключения к бд пим", e);
+
             System.out.println("Ошибка подключения к бд пим!");
             e.printStackTrace();
         }
@@ -58,9 +67,10 @@ public class bdConn {
 
             // System.out.println("начинаю уфоскон");
             ufosCon = DriverManager.getConnection(dbUrl, prop1.getUfosUser(), prop1.getUfosPass());
-
+            logger.info("коннект с уфос установлен");
             //System.out.println("получил уфос кон");
         } catch (SQLException e) {
+            logger.error("Ошибка подключения к бд пим", e);
 
             System.out.println("Ошибка подключения к бд");
             e.printStackTrace();

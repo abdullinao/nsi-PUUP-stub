@@ -1,5 +1,8 @@
 package puup;
 
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import puup.utils.prop;
 
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class main {
     private static puup.utils.prop prop1;
+    private static final Logger logger = LogManager.getLogger();
 
     static {
         try {
@@ -19,11 +23,16 @@ public class main {
     }
 
     public static void main(String[] args) {
+
         try {
+            logger.info("запуск");
+
             mainJob();
+
         } catch (Exception e) {
             e.printStackTrace();
-            mainJob();
+             mainJob();
+
         }
     }
 
@@ -47,6 +56,7 @@ public class main {
 
             public void run() {
 
+                logger.info("запуск прохода");
 
                 puup.utils.utils.printTime();
                 System.out.println("=================");
@@ -101,10 +111,12 @@ public class main {
                                 guidsChangedInPim.add(split[0]);
                                 OrgcodesChangedInPim.add(split[1]);
                             } catch (Exception e) {
+                                logger.error("Error message", e);
                                 e.printStackTrace();
                             }
                         }
                     } catch (Exception e) {
+
                         e.printStackTrace();
                     }
 
