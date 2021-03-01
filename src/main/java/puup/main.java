@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * todo
@@ -47,6 +48,7 @@ public class main {
 //        }
         Runnable resendUfosPim = new Runnable() {
             ArrayList<String> guidsToSend = new ArrayList<String>();
+            ArrayList<String> guidsToSendLastRun = new ArrayList<String>();
             ArrayList<String> guidsToSver = new ArrayList<String>();
             ArrayList<String> guidsOrgcodesChangedInPim = new ArrayList<String>();
             ArrayList<String> guidsChangedInPim = new ArrayList<String>();
@@ -61,6 +63,7 @@ public class main {
                 puup.utils.utils.printTime();
                 System.out.println("=================");
                 try {
+                    guidsToSendLastRun = guidsToSend;
                     //Тест распространения всех изменееых из в пур
 
                     // puup.bd.pim.sendToExp(guidsToSend);
@@ -121,9 +124,10 @@ public class main {
 //                    System.out.println("/////////");
 
                     //переотправка по переотправке
+                    guidsToSend = removeSendedInLastRun(guidsToSend, guidsToSendLastRun);
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
                     System.out.println("Соапом по переотправке: " + guidsToSend.size());
-                    guidsToSend.clear();
+
 
                    // переотправка по отсутствию в пим
                     puup.soap.soap_initialize.eh_initialize(guidsNotInPim);//переотправляем их соапом
@@ -161,5 +165,10 @@ public class main {
         //на лаги, лучше отправить запись дважды чем не отправить))
 
 
+    }
+
+    private static ArrayList<String> removeSendedInLastRun(ArrayList<String> current, ArrayList<String> sendedLastTime) {
+        current.removeIf(sendedLastTime::contains);
+        return current;
     }
 }

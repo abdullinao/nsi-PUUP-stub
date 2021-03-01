@@ -6,9 +6,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 public class ufos {
 
+    private static final Logger logger = LogManager.getLogger();
+    // logger.info("коннект с пим установлен");
+//  logger.error("Ошибка подключения к бд пим", e);
 
     public static ArrayList<String> getChangedGuidsFromUfos() {
 
@@ -30,6 +34,7 @@ public class ufos {
             while (UfosResult.next()) {
                 // UfosResult.next();
                 guidsArray.add(UfosResult.getString(1));
+                logger.info("getChangedGuidsFromUfos " + UfosResult.getString(1));
             }
         } catch (Exception e) {
             e.printStackTrace();

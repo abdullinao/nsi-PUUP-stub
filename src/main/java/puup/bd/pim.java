@@ -4,10 +4,14 @@ import puup.utils.prop;
 
 import java.sql.*;
 import java.util.ArrayList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class pim {
     private static puup.utils.prop prop1;
-
+    private static final Logger logger = LogManager.getLogger();
+    // logger.info("коннект с пим установлен");
+//  logger.error("Ошибка подключения к бд пим", e);
     static {
         try {
             prop1 = new prop();
@@ -28,6 +32,7 @@ public class pim {
                         pimStatement.execute(puup.utils.utils.pimSqlReq(guidsArray.get(i)));//отправляем скл запрос,запрос записан
                         //в утилсе, в утилс передается гуид из массива
                         // System.out.print(" pim - ok: " + guidsArray.get(i) + ";");
+                        logger.info("SQLexecute " + guidsArray.get(i));
                     }
                     //   System.out.print(" из пим: "+guidsArray.size()+";");
                 } catch (NullPointerException np) {
@@ -128,6 +133,7 @@ public class pim {
             ResultSet PimSverResult = pimSverStatement.executeQuery(puup.utils.utils.SverPersNotInPim());//выполнение запроса
             while (PimSverResult.next()) {
                 guidsSverArray.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса
+                logger.info("SverPersAccNotInPim " +PimSverResult.getString(1));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,6 +162,8 @@ public class pim {
                 //guid;orgcode
                 try {
                     guidChangedInPim.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса по лс
+                    logger.info("ChangedPim " +PimSverResult.getString(1));
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
