@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 import puup.utils.prop;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +33,7 @@ public class main {
 
         } catch (Exception e) {
             e.printStackTrace();
-             mainJob();
+            mainJob();
 
         }
     }
@@ -47,6 +49,7 @@ public class main {
 //        }
         Runnable resendUfosPim = new Runnable() {
             ArrayList<String> guidsToSend = new ArrayList<String>();
+            ArrayList<String> guidsToSendPrevSend = new ArrayList<String>();
             ArrayList<String> guidsToSver = new ArrayList<String>();
             ArrayList<String> guidsOrgcodesChangedInPim = new ArrayList<String>();
             ArrayList<String> guidsChangedInPim = new ArrayList<String>();
@@ -61,10 +64,11 @@ public class main {
                 puup.utils.utils.printTime();
                 System.out.println("=================");
                 try {
+                    guidsToSendPrevSend = guidsToSend;
                     //Тест распространения всех изменееых из в пур
 
-                   // puup.bd.pim.sendToExp(guidsToSend);
-                  // System.out.println("переотправил в пур: " + guidsToSend.size());
+                    // puup.bd.pim.sendToExp(guidsToSend);
+                    // System.out.println("переотправил в пур: " + guidsToSend.size());
 
 
                     //блок для переотпрваки тех, кто сумел измениться в уфосе. но если в уфос изменилась в пим
@@ -98,7 +102,7 @@ public class main {
                     System.out.println("получаю сверку");
                     guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
 
-                   // System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
+                    // System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
 
                     guidsChangedInPim.clear();
                     OrgcodesChangedInPim.clear();
@@ -106,7 +110,7 @@ public class main {
                     try {
                         for (int i = 0; i < guidsOrgcodesChangedInPim.size(); ++i) {
                             try {
-                               // System.out.println(i);
+                                // System.out.println(i);
                                 String[] split = guidsOrgcodesChangedInPim.get(i).split(";");
                                 guidsChangedInPim.add(split[0]);
                                 OrgcodesChangedInPim.add(split[1]);
@@ -134,9 +138,10 @@ public class main {
 //                    System.out.println("/////////");
 
                     //переотправка по переотправке
+                    guidsToSend = removeSendedInLastRun(guidsToSend, guidsToSendPrevSend);
                     puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
                     System.out.println("Соапом по переотправке: " + guidsToSend.size());
-                    guidsToSend.clear();
+
 
                     //переотправка по сверке
                     puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
@@ -144,6 +149,7 @@ public class main {
                     guidsToSver.clear();
 
                     //распространение архивных
+                    OrgcodesChangedInPim = new ArrayList<String>(removeDuplicates(OrgcodesChangedInPim)); //очистка от дублей
 
                     puup.bd.pim.SQLexecuteForOrgcodes(OrgcodesChangedInPim);
                     System.out.println("Архивных в пим к отправке: " + OrgcodesChangedInPim.size());
@@ -174,5 +180,14 @@ public class main {
         //на лаги, лучше отправить запись дважды чем не отправить))
 
 
+    }
+
+    private static <T> HashSet<T> removeDuplicates(Collection<T> collection) {
+        return new HashSet<T>(collection);
+    }
+
+    private static ArrayList<String> removeSendedInLastRun(ArrayList<String> current, ArrayList<String> sendedLastTime) {
+        current.removeIf(sendedLastTime::contains);
+        return current;
     }
 }
