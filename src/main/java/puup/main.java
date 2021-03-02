@@ -86,16 +86,16 @@ public class main {
                     //    } catch (NullPointerException nullPointerException) {
                     //        System.out.println("Нет гуидов для отправки из пим по сверке");
                     //    }
+                    //блок получения изменных в пим +
+                    puup.utils.utils.printTime();
+                    System.out.println("получаю измененные в пим");
+                    guidsChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
 
                     //блок получения измененных в уфосе +
                     puup.utils.utils.printTime();
                     System.out.println("получаю измененные из уфоса лс для перезаталкивания");
                     guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
 
-                    //блок получения изменных в пим +
-                    puup.utils.utils.printTime();
-                    System.out.println("получаю измененные в пим");
-                    guidsChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
 
                     //блок получения разницы между пимом и уфосом
                     puup.utils.utils.printTime();

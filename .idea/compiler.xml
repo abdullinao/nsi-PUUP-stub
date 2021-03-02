@@ -7,7 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="nsi-PUUP-stub" />
+        <module name="pers-nsi-PUUP-stub" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="nsi-PUUP-stub" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
