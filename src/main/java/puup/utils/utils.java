@@ -146,7 +146,7 @@ public class utils {
                 "                         (  select upper(guid) from \n" +
                 "  (select  * from apps.otr_ref_ubpandnubp_0_v where orgcode in ('" + orgcode + "') and status in ('ARCHIVE') order by last_update_date desc \n" +
                 ") \n" +
-                "where rownum=2\n" +
+                "where rownum<=2\n" +
                 "                         )) loop\n" +
                 "        OTR_MTL_JMS.SEND_MESS(p_guid              => l_lines.attribute2,\n" +
                 "    p_class_intern_name => l_lines.dict_name,\n" +
