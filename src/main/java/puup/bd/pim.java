@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class pim {
     private static puup.utils.prop prop1;
     private static final Logger logger = LogManager.getLogger();
+
     // logger.info("коннект с пим установлен");
 //  logger.error("Ошибка подключения к бд пим", e);
     static {
@@ -60,7 +61,7 @@ public class pim {
                         logger.info("SendAddr exp " + guidsArray.get(i));
 
                         pimStatement.execute(puup.utils.utils.sendToTSE(guidsArray.get(i)));//отправляем скл запрос,запрос записан
-                        logger.info("SendAddr tse" + guidsArray.get(i));
+                        logger.info("SendAddr tse " + guidsArray.get(i));
                     }
 
                 } catch (NullPointerException np) {
@@ -85,9 +86,11 @@ public class pim {
                     for (int i = 0; i < orgcodesArray.size(); ++i) {
 
                         pimStatement.execute(puup.utils.utils.SendArchiveFromOrgcodeToExp(orgcodesArray.get(i)));//отправляем скл запрос,запрос записан
-                        logger.info("SQLexecuteForOrgcodes exp" + orgcodesArray.get(i));
+                        logger.info("SQLexecuteForOrgcodes exp " + orgcodesArray.get(i));
                         pimStatement.execute(puup.utils.utils.SendArchiveFromOrgcodeToTSE(orgcodesArray.get(i)));
-                        logger.info("SQLexecuteForOrgcodes tse" + orgcodesArray.get(i));
+                        logger.info("SQLexecuteForOrgcodes tse " + orgcodesArray.get(i));
+                        pimStatement.execute(puup.utils.utils.SendArchiveFromOrgcodeToALL(orgcodesArray.get(i)));//отправляем скл запрос,запрос записан
+                        logger.info("SQLexecuteForOrgcodes to all " + orgcodesArray.get(i));
                     }
                 } catch (NullPointerException np) {
                 }
@@ -110,7 +113,7 @@ public class pim {
             ResultSet PimSverResult = pimSverStatement.executeQuery(puup.utils.utils.UfosPimStatSver());//выполнение запроса
             while (PimSverResult.next()) {
                 guidsSverArray.add(PimSverResult.getString(1));//заполнение массива гуидами из запроса
-                logger.info("SverkaUfosPim " +PimSverResult.getString(1));
+                logger.info("SverkaUfosPim " + PimSverResult.getString(1));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,7 +143,7 @@ public class pim {
                 //guid;orgcode
                 try {
                     guidChangedInPim.add(PimSverResult.getString(1) + ";" + PimSverResult.getString(2));//заполнение массива гуидами из запроса
-                    logger.info("ChangedPim " +PimSverResult.getString(1) + ";" + PimSverResult.getString(2));
+                    logger.info("ChangedPim " + PimSverResult.getString(1) + ";" + PimSverResult.getString(2));
 
                 } catch (Exception e) {
                     e.printStackTrace();
