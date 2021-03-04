@@ -87,17 +87,17 @@ public class main {
                     //    } catch (NullPointerException nullPointerException) {
                     //        System.out.println("Нет гуидов для отправки из пим по сверке");
                     //    }
+                    //блок получения изменных в пим
+                    puup.utils.utils.printTime();
+                    System.out.println("получаю измененные в пим");
+                    guidsOrgcodesChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
 
                     //блок получения измененных в уфосе
                     puup.utils.utils.printTime();
                     System.out.println("получаю измененные из уфоса для переотправки");
                     guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
 
-                    //блок получения изменных в пим
-                    puup.utils.utils.printTime();
-                    System.out.println("получаю измененные в пим");
-                    guidsOrgcodesChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
-                    //блок получения сверки статусов между уфос и пим
+                  //блок получения сверки статусов между уфос и пим
                     puup.utils.utils.printTime();
                     System.out.println("получаю сверку");
                     guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных

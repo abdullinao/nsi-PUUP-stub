@@ -157,6 +157,8 @@ public class utils {
                 "end;";
     }
 
+    //todo archive to all
+
     public static void printTime() {
         //System.out.println("\n");
         Calendar cal = Calendar.getInstance();
