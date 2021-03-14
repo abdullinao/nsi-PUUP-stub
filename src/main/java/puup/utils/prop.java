@@ -3,7 +3,6 @@ package puup.utils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 public class prop {
@@ -29,6 +28,11 @@ public class prop {
 
     //global settings
     private String sendPimConf;
+    private String sendUfosPimAll;
+    private String sendArchiveFromPin;
+    private String sendAddrExpTse;
+    private String statusnayaSverka;
+    private String sendAllChangedFromPim;
     private int timeout;
     private int timelag;
 
@@ -65,6 +69,11 @@ public class prop {
 
             //global
             this.sendPimConf = prop.getProperty("sendPimConf");
+            this.sendUfosPimAll = prop.getProperty("sendUfosPimAll");
+            this.sendArchiveFromPin = prop.getProperty("sendArchiveFromPin");
+            this.sendAddrExpTse = prop.getProperty("sendAddrExpTse");
+            this.statusnayaSverka = prop.getProperty("statusnayaSverka");
+            this.sendAllChangedFromPim = prop.getProperty("sendAllChangedFromPim");
             this.timeout = Integer.parseInt(prop.getProperty("timeout"));
             this.timelag = Integer.parseInt(prop.getProperty("timelag"));
 
@@ -73,6 +82,46 @@ public class prop {
             e.printStackTrace();
         }
 
+    }
+
+    public String getSendAllChangedFromPim() {
+        return sendAllChangedFromPim;
+    }
+
+    public void setSendAllChangedFromPim(String sendAllChangedFromPim) {
+        this.sendAllChangedFromPim = sendAllChangedFromPim;
+    }
+
+    public String getSendAddrExpTse() {
+        return sendAddrExpTse;
+    }
+
+    public String getStatusnayaSverka() {
+        return statusnayaSverka;
+    }
+
+    public void setStatusnayaSverka(String statusnayaSverka) {
+        this.statusnayaSverka = statusnayaSverka;
+    }
+
+    public void setSendAddrExpTse(String sendAddrExpTse) {
+        this.sendAddrExpTse = sendAddrExpTse;
+    }
+
+    public String getSendArchiveFromPin() {
+        return sendArchiveFromPin;
+    }
+
+    public void setSendArchiveFromPin(String sendArchiveFromPin) {
+        this.sendArchiveFromPin = sendArchiveFromPin;
+    }
+
+    public String getSendPimUfosAll() {
+        return sendUfosPimAll;
+    }
+
+    public void setSendPimUfosAll(String sendPimUfosAll) {
+        this.sendUfosPimAll = sendPimUfosAll;
     }
 
     public int getTimelag() {

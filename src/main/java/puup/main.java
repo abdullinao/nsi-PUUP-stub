@@ -65,43 +65,33 @@ public class main {
                 System.out.println("=================");
                 try {
                     guidsToSendPrevSend = guidsToSend;
-                    //Тест распространения всех изменееых из в пур
-
-                    // puup.bd.pim.sendToExp(guidsToSend);
-                    // System.out.println("переотправил в пур: " + guidsToSend.size());
-
-
-                    //блок для переотпрваки тех, кто сумел измениться в уфосе. но если в уфос изменилась в пим
-                    //могла не меняться по-этому пришлось убрать
-                    // puup.bd.pim.SQLexecute(guidsToSend);
-                    //puup.bd.pim.SQLexecute(guidsToSver);
-
-                    //    try {
-                    //        System.out.println("К распространению по переотправке: " + guidsToSend.size());
-
-                    //    } catch (NullPointerException nullPointerException) {
-                    //        System.out.println("Нет гуидов для отправки из пим по переотправке");
-                    //    }
-                    //    try {
-                    //        System.out.println("К распространению по сверке: " + guidsToSver.size());
-                    //    } catch (NullPointerException nullPointerException) {
-                    //        System.out.println("Нет гуидов для отправки из пим по сверке");
-                    //    }
                     //блок получения изменных в пим
-                    puup.utils.utils.printTime();
-                    System.out.println("получаю измененные в пим");
-                    guidsOrgcodesChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
+                    if (prop1.getSendAllChangedFromPim().equalsIgnoreCase("y")) {
+                        puup.utils.utils.printTime();
+                        System.out.println("получаю измененные в пим");
+                        guidsOrgcodesChangedInPim = puup.bd.pim.ChangedPim();//получаем список гуидов;оргкодов из пим измененных
+                    } else {
+                        System.out.println("отправка измененных в пим отключена");
+                    }
 
                     //блок получения измененных в уфосе
-                    puup.utils.utils.printTime();
-                    System.out.println("получаю измененные из уфоса для переотправки");
-                    guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
+                    if (prop1.getSendPimUfosAll().equalsIgnoreCase("y")) {
 
-                  //блок получения сверки статусов между уфос и пим
-                    puup.utils.utils.printTime();
-                    System.out.println("получаю сверку");
-                    guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
+                        puup.utils.utils.printTime();
+                        System.out.println("получаю измененные из уфоса для переотправки в пим");
+                        guidsToSend = puup.bd.ufos.getChangedGuidsFromUfos();//получаем список гуидов из уфоса измененных
+                    }
 
+
+                    //блок получения сверки статусов между уфос и пим
+
+                    if (prop1.getStatusnayaSverka().equalsIgnoreCase("y")) {
+                        puup.utils.utils.printTime();
+                        System.out.println("получаю статусную сверку");
+                        guidsToSver = puup.bd.pim.SverkaUfosPim();//получаем список гуидов из уфоса измененных
+                    } else {
+                        System.out.println("статсуная сверка отключена");
+                    }
                     // System.out.println("\nвсего связок гуид+оргкод: " + guidsOrgcodesChangedInPim.size());
 
                     guidsChangedInPim.clear();
@@ -115,7 +105,7 @@ public class main {
                                 guidsChangedInPim.add(split[0]);
                                 OrgcodesChangedInPim.add(split[1]);
                             } catch (Exception e) {
-                                logger.error("Error message", e);
+                                System.out.println("Error message :");
                                 e.printStackTrace();
                             }
                         }
@@ -136,37 +126,63 @@ public class main {
 //                    }
 //
 //                    System.out.println("/////////");
+                    //переотправка  соапом по переотправке
+                    if (prop1.getSendPimUfosAll().equalsIgnoreCase("y")) {
 
-                    //переотправка по переотправке
-                    guidsToSend = removeSendedInLastRun(guidsToSend, guidsToSendPrevSend);
-                    puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
-                    System.out.println("Соапом по переотправке: " + guidsToSend.size());
+                        guidsToSend = removeSendedInLastRun(guidsToSend, guidsToSendPrevSend);
+                        puup.soap.soap_initialize.eh_initialize(guidsToSend);//переотправляем их соапом
+                        System.out.println("Соапом по переотправке: " + guidsToSend.size());
 
+                    } else {
+                        System.out.println("переотправка всех записей из уфос в пим отключена");
+                    }
 
                     //переотправка по сверке
-                    puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
-                    System.out.println("Соапом по сверке: " + guidsToSver.size());
-                    guidsToSver.clear();
+
+                    if (prop1.getStatusnayaSverka().equalsIgnoreCase("y")) {
+
+                        puup.soap.soap_initialize.eh_initialize(guidsToSver);//переотправляем их соапом
+                        System.out.println("Соапом по статусной сверке: " + guidsToSver.size());
+                        guidsToSver.clear();
+                    } else {
+                        System.out.println("статусная сверка отключена");
+                    }
 
                     //распространение архивных
-                    OrgcodesChangedInPim = new ArrayList<String>(removeDuplicates(OrgcodesChangedInPim)); //очистка от дублей
+                    if (prop1.getSendArchiveFromPin().equalsIgnoreCase("y")) {
+                        OrgcodesChangedInPim = new ArrayList<String>(removeDuplicates(OrgcodesChangedInPim)); //очистка от дублей
 
-                    puup.bd.pim.SQLexecuteForOrgcodes(OrgcodesChangedInPim);
-                    System.out.println("Архивных в пим к отправке: " + OrgcodesChangedInPim.size());
-                    ResendcounArchive = ResendcounArchive + OrgcodesChangedInPim.size();
-                    System.out.println("Всего переотправил архивных: " + ResendcounArchive);
+                        puup.bd.pim.SQLexecuteForOrgcodes(OrgcodesChangedInPim);
+                        System.out.println("Архивных в пим к отправке: " + OrgcodesChangedInPim.size());
+                        ResendcounArchive = ResendcounArchive + OrgcodesChangedInPim.size();
+                        System.out.println("Всего переотправил архивных: " + ResendcounArchive);
+                    } else {
+                        System.out.println("переотправка архивных из пим отключена");
+                    }
 
 
                     //распространение измененных
-                    puup.bd.pim.SQLexecute(guidsChangedInPim);
-                    System.out.println("Изменных в пим к отправке: " + guidsChangedInPim.size());
-                    Resendcoun = Resendcoun + guidsChangedInPim.size();
-                    System.out.println("Всего переотправил активных: " + Resendcoun);
+
+                    if (prop1.getSendAllChangedFromPim().equalsIgnoreCase("y")) {
+
+
+                        puup.bd.pim.SQLexecute(guidsChangedInPim);
+                        System.out.println("Изменных в пим к отправке: " + guidsChangedInPim.size());
+                        Resendcoun = Resendcoun + guidsChangedInPim.size();
+                        System.out.println("Всего переотправил активных: " + Resendcoun);
+                    } else {
+                        System.out.println("переотправка измененных в пим отключена");
+                    }
 
                     //повторная отправка в exp/tse
-                    System.out.println("---повторная отправка активных отдельно адресно");
-                    puup.bd.pim.SendAddr(guidsChangedInPim);
-                    System.out.println("В этом проходе: " + guidsChangedInPim.size());
+                    if (prop1.getSendAddrExpTse().equalsIgnoreCase("y")) {
+
+                        System.out.println("повторная отправка активных отдельно адресно");
+                        puup.bd.pim.SendAddr(guidsChangedInPim);
+                        System.out.println("В этом проходе: " + guidsChangedInPim.size());
+                    } else {
+                        System.out.println("повторная отправка активных отдельно адресно пим отключена");
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
